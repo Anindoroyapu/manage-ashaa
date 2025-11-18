@@ -29,74 +29,290 @@ const BookingForm: React.FC<{
   initialData?: Booking | null;
 }> = ({ onSubmit, onCancel, isLoading, initialData }) => {
   const [formData, setFormData] = React.useState({
-    name: initialData?.name || "",
-    clientEmail: initialData?.clientEmail || "",
-    eventDate: initialData?.eventDate || "",
-    status: initialData?.status || "Pending",
+    id: initialData?.id ?? "",
+    bookingCost: initialData?.bookingCost ?? 0,
+    bookingType: initialData?.bookingType ?? "",
+    email: initialData?.email ?? "",
+    endDate: initialData?.endDate ?? "",
+    fullName: initialData?.fullName ?? "",
+    location: initialData?.location ?? "",
+    message: initialData?.message ?? "",
+    package: initialData?.package ?? "",
+    paymentMethod: initialData?.paymentMethod ?? "",
+    paymentStatus: initialData?.paymentStatus ?? "",
+    phone: initialData?.phone ?? "",
+    startDate: initialData?.startDate ?? "",
+    status: initialData?.status ?? "Pending",
+    subject: initialData?.subject ?? "",
+    totalCost: initialData?.totalCost ?? 0,
   });
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLSelectElement>
+      | React.ChangeEvent<HTMLTextAreaElement>
   ) => {
-    const { name, value } = e.target;
+    const target = e.target as
+      | HTMLInputElement
+      | HTMLSelectElement
+      | HTMLTextAreaElement;
+    const { name } = target;
+    let value: any = target.value;
+
+    // convert number inputs to numbers
+    if ((target as HTMLInputElement).type === "number") {
+      value = value === "" ? "" : Number(value);
+    }
+
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
 
-    onSubmit(formData as Omit<Booking, "id" | "createdAt">);
+    try {
+      const endpointBase = "https://admin.ashaa.xyz/api/Booking";
+      const url = formData.id ? `${endpointBase}/${formData.id}` : endpointBase;
+      const method = formData.id ? "PUT" : "POST";
+
+      const res = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          bookingCost: formData.bookingCost,
+          bookingType: formData.bookingType,
+          email: formData.email,
+          endDate: formData.endDate,
+          fullName: formData.fullName,
+          location: formData.location,
+          message: formData.message,
+          package: formData.package,
+          paymentMethod: formData.paymentMethod,
+          paymentStatus: formData.paymentStatus,
+          phone: formData.phone,
+          startDate: formData.startDate,
+          status: formData.status,
+          subject: formData.subject,
+          totalCost: formData.totalCost,
+        }),
+      });
+    } catch (err) {
+      console.error("POST Error:", err);
+    }
+    onSubmit(formData);
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="block mb-1 font-medium">Booking Name</label>
+        <label className="block mb-1 font-medium">Full Name</label>
         <input
           type="text"
-          name="name"
-          value={formData.name}
+          name="fullName"
+          value={formData.fullName}
           onChange={handleChange}
           className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600"
           required
         />
       </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label className="block mb-1 font-medium">Email</label>
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600"
+          />
+        </div>
+
+        <div>
+          <label className="block mb-1 font-medium">Phone</label>
+          <input
+            type="text"
+            name="phone"
+            value={formData.phone}
+            onChange={handleChange}
+            className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600"
+          />
+        </div>
+      </div>
+
       <div>
-        <label className="block mb-1 font-medium">Client Email</label>
+        <label className="block mb-1 font-medium">Location</label>
         <input
-          type="email"
-          name="clientEmail"
-          value={formData.clientEmail}
+          type="text"
+          name="location"
+          value={formData.location}
           onChange={handleChange}
           className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600"
-          required
         />
       </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <label className="block mb-1 font-medium">Package</label>
+          <select
+            name="package"
+            value={formData.package}
+            onChange={handleChange}
+            className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600"
+          >
+            <option value="">Select</option>
+            <option value="Basic">Basic</option>
+            <option value="Standard">Standard</option>
+            <option value="Premium">Premium</option>
+            <option value="Custom">Custom</option>
+          </select>
+        </div>
+
+        <div>
+          <label className="block mb-1 font-medium">Subject / Type</label>
+          <select
+            name="subject"
+            value={formData.subject}
+            onChange={handleChange}
+            className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600"
+          >
+            <option value="">Select</option>
+            <option value="Wedding">Wedding</option>
+            <option value="Corporate">Corporate</option>
+            <option value="Birthday">Birthday</option>
+            <option value="Anniversary">Anniversary</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div>
+          <label className="block mb-1 font-medium">Booking Type</label>
+          <select
+            name="bookingType"
+            value={formData.bookingType}
+            onChange={handleChange}
+            className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600"
+          >
+            <option value="">Select</option>
+            <option value="Single Day">Single Day</option>
+            <option value="Multi Day">Multi Day</option>
+            <option value="Hourly">Hourly</option>
+            <option value="Custom">Custom</option>
+          </select>
+        </div>
+      </div>
+
       <div>
-        <label className="block mb-1 font-medium">Event Date</label>
-        <input
-          type="date"
-          name="eventDate"
-          value={formData.eventDate}
+        <label className="block mb-1 font-medium">Message</label>
+        <textarea
+          name="message"
+          value={formData.message}
           onChange={handleChange}
           className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600"
-          required
+          rows={2}
         />
       </div>
-      <div>
-        <label className="block mb-1 font-medium">Status</label>
-        <select
-          name="status"
-          value={formData.status}
-          onChange={handleChange}
-          className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600"
-        >
-          <option value="Pending">Pending</option>
-          <option value="Confirmed">Confirmed</option>
-          <option value="Completed">Completed</option>
-          <option value="Cancelled">Cancelled</option>
-        </select>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <label className="block mb-1 font-medium">Booking Cost</label>
+          <input
+            type="number"
+            name="bookingCost"
+            value={formData.bookingCost}
+            onChange={handleChange}
+            step="0.01"
+            className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600"
+          />
+        </div>
+
+        <div>
+          <label className="block mb-1 font-medium">Total Cost</label>
+          <input
+            type="number"
+            name="totalCost"
+            value={formData.totalCost}
+            onChange={handleChange}
+            step="0.01"
+            className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600"
+          />
+        </div>
+
+        <div>
+          <label className="block mb-1 font-medium">Payment Method</label>
+          <select
+            name="paymentMethod"
+            value={formData.paymentMethod}
+            onChange={handleChange}
+            className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600"
+          >
+            <option value="">Select</option>
+            <option value="Cash">Cash</option>
+            <option value="Card">Card</option>
+            <option value="Bank Transfer">Bank Transfer</option>
+            <option value="Mobile Money">Mobile Money</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
       </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label className="block mb-1 font-medium">Start Date</label>
+          <input
+            type="date"
+            name="startDate"
+            value={formData.startDate}
+            onChange={handleChange}
+            className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600"
+          />
+        </div>
+
+        <div>
+          <label className="block mb-1 font-medium">End Date</label>
+          <input
+            type="date"
+            name="endDate"
+            value={formData.endDate}
+            onChange={handleChange}
+            className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600"
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label className="block mb-1 font-medium">Payment Status</label>
+          <select
+            name="paymentStatus"
+            value={formData.paymentStatus}
+            onChange={handleChange}
+            className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600"
+          >
+            <option value="">Select</option>
+            <option value="Pending">Pending</option>
+            <option value="Paid">Paid</option>
+            <option value="Partial">Partial</option>
+          </select>
+        </div>
+
+        <div>
+          <label className="block mb-1 font-medium">Status</label>
+          <select
+            name="status"
+            value={formData.status}
+            onChange={handleChange}
+            className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600"
+          >
+            <option value="Pending">Pending</option>
+            <option value="Confirmed">Confirmed</option>
+            <option value="Completed">Completed</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+        </div>
+      </div>
+
       <div className="flex justify-end gap-4">
         <Button type="button" variant="secondary" onClick={onCancel}>
           Cancel
