@@ -119,8 +119,15 @@ const BookingTable: React.FC<{
       <thead>
         <tr className="border-b dark:border-gray-700">
           <th className="p-3">Name</th>
-          <th className="p-3">Email</th>
+          <th className="p-3">Contact</th>
+          <th className="p-3">Location</th>
+          <th className="p-3">Package</th>
+          <th className="p-3">Type</th>
+
           <th className="p-3">Event Date</th>
+          <th className="p-3">Advance</th>
+          <th className="p-3">Pay</th>
+
           <th className="p-3">Status</th>
           <th className="p-3">Actions</th>
         </tr>
@@ -129,9 +136,18 @@ const BookingTable: React.FC<{
         {items.map((item) => (
           <tr key={item.id} className="border-b dark:border-gray-700">
             <td className="p-3">{item.fullName}</td>
-            <td className="p-3">{item.clientEmail}</td>
-            <td className="p-3">{item.eventDate}</td>
-            <td className="p-3">{item.status}</td>
+            <td className="p-3">
+              {item.phone}
+              <br />
+              {item.email}
+            </td>
+            <td className="p-3">{item.location}</td>
+            <td className="p-3">{item.package}</td>
+            <td className="p-3">{item.subject}</td>
+            <td className="p-3">{item.startDate}</td>
+            <td className="p-3">{item.bookingCost}</td>{" "}
+            <td className="p-3">{item.totalCost}</td>
+            <td className="p-3">{item.paymentStatus}</td>
             <td className="p-3">
               <div className="flex gap-2">
                 <Button variant="secondary" onClick={() => onEdit(item)}>
