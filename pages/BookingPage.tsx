@@ -4,22 +4,22 @@ import Button from "../components/ui/Button";
 import CrudComponent from "../components/CrudComponent";
 
 // const initialBookings: Booking[] = [
-// {
-//   id: "1",
-//   name: "John Doe Wedding",
-//   clientEmail: "john@example.com",
-//   eventDate: "2024-08-15",
-//   status: "Confirmed",
-//   createdAt: new Date().toISOString(),
-// },
-// {
-//   id: "2",
-//   name: "Corporate Event",
-//   clientEmail: "corp@example.com",
-//   eventDate: "2024-09-01",
-//   status: "Pending",
-//   createdAt: new Date().toISOString(),
-// },
+//   {
+//     id: "1",
+//     name: "John Doe Wedding",
+//     clientEmail: "john@example.com",
+//     eventDate: "2024-08-15",
+//     status: "Confirmed",
+//     createdAt: new Date().toISOString(),
+//   },
+//   {
+//     id: "2",
+//     name: "Corporate Event",
+//     clientEmail: "corp@example.com",
+//     eventDate: "2024-09-01",
+//     status: "Pending",
+//     createdAt: new Date().toISOString(),
+//   },
 // ];
 
 const BookingForm: React.FC<{
@@ -110,7 +110,7 @@ const BookingForm: React.FC<{
 };
 
 const BookingTable: React.FC<{
-  items: any[];
+  items: Booking[];
   onEdit: (item: Booking) => void;
   onDelete: (id: string) => void;
 }> = ({ items, onEdit, onDelete }) => (
@@ -148,9 +148,9 @@ const BookingTable: React.FC<{
     </table>
   </div>
 );
-
 const BookingPage: React.FC = () => {
-  const [bookings, setBookings] = React.useState<any>(null);
+  const [bookingList, setBookingList] = React.useState<Booking[]>([]);
+  const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
     fetchData();
@@ -160,17 +160,18 @@ const BookingPage: React.FC = () => {
     try {
       const res = await fetch("https://admin.ashaa.xyz/api/Booking");
       const json = await res.json();
-      setBookings(json);
+      setBookingList(json || []);
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
-
   return (
     <CrudComponent<Booking>
       title="Manage Bookings"
       itemType="Booking"
-      initialItems={bookings}
+      initialItems={bookingList}
       renderTable={(items, onEdit, onDelete) => (
         <BookingTable items={items} onEdit={onEdit} onDelete={onDelete} />
       )}
@@ -185,5 +186,4 @@ const BookingPage: React.FC = () => {
     />
   );
 };
-
 export default BookingPage;
