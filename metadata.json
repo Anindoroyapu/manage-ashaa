@@ -1,0 +1,5 @@
+{
+  "name": "Admin Panel Pro",
+  "description": "A comprehensive and aesthetically pleasing admin panel with a static login system. It features full CRUD (Create, Read, Update, Delete) functionality for managing bookings, contacts, photos, collections, expenditures, and more, all with a beautiful UI/UX.",
+  "requestFramePermissions": []
+}
