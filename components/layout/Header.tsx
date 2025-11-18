@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React from "react";
 
 interface HeaderProps {
   sidebarOpen: boolean;
@@ -22,32 +21,32 @@ const Header: React.FC<HeaderProps> = ({ sidebarOpen, setSidebarOpen }) => {
               <span className="du-block absolute right-0 h-full w-full">
                 <span
                   className={`relative top-0 left-0 my-1 block h-0.5 w-full rounded-sm bg-black dark:bg-white transition-all duration-200 ease-in-out ${
-                    sidebarOpen ? 'top-2 rotate-45' : ''
+                    sidebarOpen ? "top-2 rotate-45" : ""
                   }`}
                 ></span>
                 <span
                   className={`relative top-0 left-0 my-1 block h-0.5 w-full rounded-sm bg-black dark:bg-white transition-all duration-200 ease-in-out ${
-                    sidebarOpen ? 'opacity-0' : ''
+                    sidebarOpen ? "opacity-0" : ""
                   }`}
                 ></span>
                 <span
                   className={`relative top-0 left-0 my-1 block h-0.5 w-full rounded-sm bg-black dark:bg-white transition-all duration-200 ease-in-out ${
-                    sidebarOpen ? '-top-2 -rotate-45' : ''
+                    sidebarOpen ? "-top-2 -rotate-45" : ""
                   }`}
                 ></span>
               </span>
             </span>
           </button>
-          <h1 className="text-xl font-semibold">Admin Panel</h1>
+          <h1 className="text-xl font-semibold">Asha LensCraft</h1>
         </div>
-        
+
         <div className="hidden lg:block">
-            {/* Can add search bar or other elements here */}
+          {/* Can add search bar or other elements here */}
         </div>
 
         <div className="flex items-center gap-4">
           <div className="relative">
-            <span className="font-medium">Welcome, Admin</span>
+            <span className="font-medium">Welcome, Anindo</span>
             {/* Placeholder for user dropdown */}
           </div>
         </div>

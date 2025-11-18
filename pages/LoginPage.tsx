@@ -1,27 +1,26 @@
-
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
-import Button from '../components/ui/Button';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
+import Button from "../components/ui/Button";
 
 const LoginPage: React.FC = () => {
-  const [username, setUsername] = useState('admin');
-  const [password, setPassword] = useState('password');
-  const [error, setError] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const auth = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setIsLoading(true);
     const success = await auth.login(username, password);
     setIsLoading(false);
     if (success) {
-      navigate('/');
+      navigate("/");
     } else {
-      setError('Invalid username or password.');
+      setError("Invalid username or password.");
     }
   };
 
@@ -36,7 +35,9 @@ const LoginPage: React.FC = () => {
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-4 rounded-md shadow-sm">
             <div>
-              <label htmlFor="username" className="sr-only">Username</label>
+              <label htmlFor="username" className="sr-only">
+                Username
+              </label>
               <input
                 id="username"
                 name="username"
@@ -50,7 +51,9 @@ const LoginPage: React.FC = () => {
               />
             </div>
             <div>
-              <label htmlFor="password-input" className="sr-only">Password</label>
+              <label htmlFor="password-input" className="sr-only">
+                Password
+              </label>
               <input
                 id="password-input"
                 name="password"
