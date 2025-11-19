@@ -63,11 +63,11 @@ const CollectionForm: React.FC<{
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="block mb-1 font-medium">Collection Name/Reason</label>
+        <label className="block mb-1 font-medium"> Name</label>
         <input type="text" name="fullName" value={formData.fullName} onChange={handleChange} className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600" required />
       </div>
        <div>
-        <label className="block mb-1 font-medium">Title</label>
+        <label className="block mb-1 font-medium">Collection Reason</label>
         <input type="text" name="title" value={formData.title} onChange={handleChange} className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600" required />
       </div>
        <div>
