@@ -118,7 +118,7 @@ const CollectionTable: React.FC<{
           <th className="p-3">Note</th>
 
           <th className="p-3">Amount</th>
-          {/* <th className="p-3">Payment Method</th> */}
+          <th className="p-3">Payment Method</th>
           <th className="p-3">Actions</th>
         </tr>
       </thead>
