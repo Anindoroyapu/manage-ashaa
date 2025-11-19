@@ -22,10 +22,10 @@ const menuItems = [
   { path: "/", icon: <DashboardIcon />, label: "Dashboard" },
   { path: "/booking", icon: <BookingIcon />, label: "Booking" },
   { path: "/contact", icon: <ContactIcon />, label: "Contact" },
-  { path: "/photo-list", icon: <PhotoListIcon />, label: "Photo List" },
+  // { path: "/photo-list", icon: <PhotoListIcon />, label: "Photo List" },
   { path: "/collection", icon: <CollectionIcon />, label: "Collection" },
   { path: "/expenditure", icon: <ExpenditureIcon />, label: "Expenditure" },
-  { path: "/other", icon: <OtherIcon />, label: "Other" },
+  // { path: "/other", icon: <OtherIcon />, label: "Other" },
   { path: "/settings", icon: <SettingsIcon />, label: "Settings" },
 ];
 
