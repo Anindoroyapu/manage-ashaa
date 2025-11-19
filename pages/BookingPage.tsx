@@ -80,6 +80,7 @@ const BookingForm: React.FC<{
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          id: formData.id,
           bookingCost: formData.bookingCost,
           bookingType: formData.bookingType,
           email: formData.email,

@@ -13,6 +13,7 @@ const ContactForm: React.FC<{
   initialData?: Contact | null;
 }> = ({ onSubmit, onCancel, isLoading, initialData }) => {
   const [formData, setFormData] = React.useState({
+    id: initialData?.id || '',
    fullName: initialData?.fullName || '',
     email: initialData?.email || '',
     phone: initialData?.phone || '',
@@ -39,6 +40,7 @@ const ContactForm: React.FC<{
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          id: formData.id,
           fullName: formData.fullName,
           email: formData.email,
           phone: formData.phone,

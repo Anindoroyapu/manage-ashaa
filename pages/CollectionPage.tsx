@@ -4,10 +4,7 @@ import type { Collection } from '../types';
 import Button from '../components/ui/Button';
 import CrudComponent from '../components/CrudComponent';
 
-const initialCollections: Collection[] = [
-  { id: '1', name: 'Payment from John Doe', amount: 1500, paymentMethod: 'Card', createdAt: new Date().toISOString() },
-  { id: '2', name: 'Corporate Event Deposit', amount: 500, paymentMethod: 'Online', createdAt: new Date().toISOString() },
-];
+
 
 const CollectionForm: React.FC<{
   onSubmit: (data: Omit<Collection, 'id' | 'createdAt'>) => void;
@@ -26,9 +23,30 @@ const CollectionForm: React.FC<{
     setFormData(prev => ({ ...prev, [name]: type === 'number' ? parseFloat(value) : value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+ const handleSubmit = async (e: any) => {
     e.preventDefault();
-    onSubmit(formData as Omit<Collection, 'id' | 'createdAt'>);
+   try {
+      const endpointBase = "https://admin.ashaa.xyz/api/Collection";
+      const url = formData.id ? `${endpointBase}/${formData.id}` : endpointBase;
+      const method = formData.id ? "PUT" : "POST";
+
+      const res = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fullName: formData.fullName,
+          email: formData.email,
+          phone: formData.phone,
+          subject: formData.subject,
+          message: formData.message,
+        }),
+      });
+    } catch (err) {
+      console.error("POST Error:", err);
+    }
+    onSubmit(formData);
   };
 
   return (
@@ -92,11 +110,29 @@ const CollectionTable: React.FC<{
 );
 
 const CollectionPage: React.FC = () => {
+      const [collectionList, setCollectionList] = React.useState<Collection[]>([]);
+      const [isLoading, setIsLoading] = React.useState(true);
+    
+      React.useEffect(() => {
+        fetchData();
+      }, []);
+    
+      const fetchData = async () => {
+        try {
+          const res = await fetch("https://admin.ashaa.xyz/api/Collection");
+          const json = await res.json();
+          setCollectionList(json || []);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        } finally {
+          setIsLoading(false);
+        }
+      };
     return (
         <CrudComponent<Collection>
             title="Manage Collections"
             itemType="Collection"
-            initialItems={initialCollections}
+            initialItems={collectionList}
             renderTable={(items, onEdit, onDelete) => <CollectionTable items={items} onEdit={onEdit} onDelete={onDelete} />}
             renderForm={(onSubmit, onCancel, isLoading, initialData) => <CollectionForm onSubmit={onSubmit} onCancel={onCancel} isLoading={isLoading} initialData={initialData} />}
         />
