@@ -3,6 +3,7 @@ import React from 'react';
 import type { Collection } from '../types';
 import Button from '../components/ui/Button';
 import CrudComponent from '../components/CrudComponent';
+import { title } from 'process';
 
 
 
@@ -13,9 +14,15 @@ const CollectionForm: React.FC<{
   initialData?: Collection | null;
 }> = ({ onSubmit, onCancel, isLoading, initialData }) => {
   const [formData, setFormData] = React.useState({
-    name: initialData?.name || '',
+    id: initialData?.id || '',
+    fullName: initialData?.fullName || '',
+    title: initialData?.title || '',
+    details: initialData?.details || '',
+    note: initialData?.note || '',
+    pMethod: initialData?.method || 'Cash',
     amount: initialData?.amount || 0,
-    paymentMethod: initialData?.paymentMethod || 'Cash',
+    status: initialData?.status || 'Submitted',
+   
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -36,11 +43,15 @@ const CollectionForm: React.FC<{
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          id: formData.id,
           fullName: formData.fullName,
-          email: formData.email,
-          phone: formData.phone,
-          subject: formData.subject,
-          message: formData.message,
+          amount: formData.amount,
+          method: formData.pMethod,
+          details: formData.details,
+          note: formData.note,
+          title: formData.title,
+          status: formData.status,
+           collection:"collection",
         }),
       });
     } catch (err) {
@@ -53,20 +64,32 @@ const CollectionForm: React.FC<{
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <label className="block mb-1 font-medium">Collection Name/Reason</label>
-        <input type="text" name="name" value={formData.name} onChange={handleChange} className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600" required />
+        <input type="text" name="fullName" value={formData.fullName} onChange={handleChange} className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600" required />
       </div>
+       <div>
+        <label className="block mb-1 font-medium">Title</label>
+        <input type="text" name="title" value={formData.title} onChange={handleChange} className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600" required />
+      </div>
+       <div>
+        <label className="block mb-1 font-medium">Details</label>
+        <input type="text" name="details" value={formData.details} onChange={handleChange} className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600" required />
+      </div>
+      
       <div>
         <label className="block mb-1 font-medium">Amount</label>
         <input type="number" name="amount" value={formData.amount} onChange={handleChange} className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600" required />
+      </div> <div>
+        <label className="block mb-1 font-medium">Note</label>
+        <input type="text" name="note" value={formData.note} onChange={handleChange} className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600" required />
       </div>
-      <div>
+      {/* <div>
         <label className="block mb-1 font-medium">Payment Method</label>
-        <select name="paymentMethod" value={formData.paymentMethod} onChange={handleChange} className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+        <select name="pMethod" value={formData.pMethod} onChange={handleChange} className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
           <option value="Cash">Cash</option>
           <option value="Card">Card</option>
           <option value="Online">Online</option>
         </select>
-      </div>
+      </div> */}
       <div className="flex justify-end gap-4">
         <Button type="button" variant="secondary" onClick={onCancel}>Cancel</Button>
         <Button type="submit" isLoading={isLoading}>{initialData ? 'Update' : 'Create'}</Button>
@@ -85,17 +108,24 @@ const CollectionTable: React.FC<{
       <thead>
         <tr className="border-b dark:border-gray-700">
           <th className="p-3">Name</th>
+                    <th className="p-3">Title</th>
+          <th className="p-3">Details</th>
+          <th className="p-3">Note</th>
+
           <th className="p-3">Amount</th>
-          <th className="p-3">Payment Method</th>
+          {/* <th className="p-3">Payment Method</th> */}
           <th className="p-3">Actions</th>
         </tr>
       </thead>
       <tbody>
         {items.map(item => (
           <tr key={item.id} className="border-b dark:border-gray-700">
-            <td className="p-3">{item.name}</td>
-            <td className="p-3">${item.amount.toFixed(2)}</td>
-            <td className="p-3">{item.paymentMethod}</td>
+            <td className="p-3">{item.fullName}</td>
+            <td className="p-3">{item.title}</td>
+            <td className="p-3">{item.details}</td>
+            <td className="p-3">{item.note}</td>
+            <td className="p-3">{item.amount.toFixed(2)}</td>
+            <td className="p-3">{item.method}</td>
             <td className="p-3">
               <div className="flex gap-2">
                 <Button variant="secondary" onClick={() => onEdit(item)}>Edit</Button>
