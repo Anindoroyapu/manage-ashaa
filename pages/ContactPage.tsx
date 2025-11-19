@@ -13,9 +13,10 @@ const ContactForm: React.FC<{
   initialData?: Contact | null;
 }> = ({ onSubmit, onCancel, isLoading, initialData }) => {
   const [formData, setFormData] = React.useState({
-    name: initialData?.name || '',
+   fullName: initialData?.fullName || '',
     email: initialData?.email || '',
     phone: initialData?.phone || '',
+    subject: initialData?.subject || '',
     message: initialData?.message || '',
   });
 
@@ -24,8 +25,30 @@ const ContactForm: React.FC<{
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+ 
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
+    try {
+      const endpointBase = "https://admin.ashaa.xyz/api/Contact";
+      const url = formData.id ? `${endpointBase}/${formData.id}` : endpointBase;
+      const method = formData.id ? "PUT" : "POST";
+
+      const res = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fullName: formData.fullName,
+          email: formData.email,
+          phone: formData.phone,
+          subject: formData.subject,
+          message: formData.message,
+        }),
+      });
+    } catch (err) {
+      console.error("POST Error:", err);
+    }
     onSubmit(formData);
   };
 
@@ -33,7 +56,7 @@ const ContactForm: React.FC<{
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <label className="block mb-1 font-medium">Name</label>
-        <input type="text" name="name" value={formData.name} onChange={handleChange} className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600" required />
+        <input type="text" name="fullName" value={formData.fullName} onChange={handleChange} className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600" required />
       </div>
        <div>
         <label className="block mb-1 font-medium">Email</label>
@@ -42,6 +65,10 @@ const ContactForm: React.FC<{
        <div>
         <label className="block mb-1 font-medium">Phone</label>
         <input type="tel" name="phone" value={formData.phone} onChange={handleChange} className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600" />
+      </div> 
+      <div>
+        <label className="block mb-1 font-medium">Subject</label>
+        <input type="text" name="subject" value={formData.subject} onChange={handleChange} className="w-full p-2 border rounded bg-gray-50 dark:bg-gray-700 dark:border-gray-600" />
       </div>
       <div>
         <label className="block mb-1 font-medium">Message</label>
@@ -72,7 +99,8 @@ const ContactTable: React.FC<{
         </tr>
       </thead>
       <tbody>
-        {items.map(item => (
+        {items.slice()
+                .reverse().map(item => (
           <tr key={item.id} className="border-b dark:border-gray-700">
             <td className="p-3">{item.fullName}</td>
             <td className="p-3">{item.email}</td>
