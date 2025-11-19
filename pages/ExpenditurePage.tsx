@@ -35,23 +35,28 @@ const ExpenditureForm: React.FC<{
        const url = formData.id ? `${endpointBase}/${formData.id}` : endpointBase;
        const method = formData.id ? "PUT" : "POST";
  
-       const res = await fetch(url, {
-         method,
-         headers: {
-           "Content-Type": "application/json",
-         },
-         body: JSON.stringify({
-           id: formData.id,
-           fullName: formData.fullName,
-           amount: formData.amount,
-           method: formData.pMethod,
-           details: formData.details,
-           note: formData.note,
-           title: formData.title,
-           status: formData.status,
-            expenditure:"expenditure",
-         }),
-       });
+      const payload: Record<string, any> = {
+        fullName: formData.fullName,
+        amount: formData.amount,
+        method: formData.pMethod,
+        details: formData.details,
+        note: formData.note,
+        title: formData.title,
+        status: formData.status,
+        expenditure: "expenditure",
+      };
+
+      if (formData.id) {
+        payload.id = formData.id;
+      }
+
+      const res = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
      } catch (err) {
        console.error("POST Error:", err);
      }
@@ -108,7 +113,8 @@ const ExpenditureTable: React.FC<{
         </tr>
       </thead>
       <tbody>
-        {items.map(item => (
+        {items.slice()
+                .reverse().map(item => (
           <tr key={item.id} className="border-b dark:border-gray-700">
             <td className="p-3">{item.fullName}</td>
             <td className="p-3">{item.title}</td>

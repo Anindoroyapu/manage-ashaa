@@ -34,19 +34,24 @@ const ContactForm: React.FC<{
       const url = formData.id ? `${endpointBase}/${formData.id}` : endpointBase;
       const method = formData.id ? "PUT" : "POST";
 
+      const payload: Record<string, any> = {
+        fullName: formData.fullName,
+        email: formData.email,
+        phone: formData.phone,
+        subject: formData.subject,
+        message: formData.message,
+      };
+
+      if (formData.id) {
+        payload.id = formData.id;
+      }
+
       const res = await fetch(url, {
         method,
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          id: formData.id,
-          fullName: formData.fullName,
-          email: formData.email,
-          phone: formData.phone,
-          subject: formData.subject,
-          message: formData.message,
-        }),
+        body: JSON.stringify(payload),
       });
     } catch (err) {
       console.error("POST Error:", err);

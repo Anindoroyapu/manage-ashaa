@@ -74,29 +74,35 @@ const BookingForm: React.FC<{
       const url = formData.id ? `${endpointBase}/${formData.id}` : endpointBase;
       const method = formData.id ? "PUT" : "POST";
 
+      const payload: Record<string, any> = {
+        bookingCost: formData.bookingCost,
+        bookingType: formData.bookingType,
+        email: formData.email,
+        endDate: formData.endDate,
+        fullName: formData.fullName,
+        location: formData.location,
+        message: formData.message,
+        package: formData.package,
+        paymentMethod: formData.paymentMethod,
+        paymentStatus: formData.paymentStatus,
+        phone: formData.phone,
+        startDate: formData.startDate,
+        status: formData.status,
+        subject: formData.subject,
+        totalCost: formData.totalCost,
+      };
+
+      // include id only when present
+      if (formData.id) {
+        payload.id = formData.id;
+      }
+
       const res = await fetch(url, {
         method,
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          id: formData.id,
-          bookingCost: formData.bookingCost,
-          bookingType: formData.bookingType,
-          email: formData.email,
-          endDate: formData.endDate,
-          fullName: formData.fullName,
-          location: formData.location,
-          message: formData.message,
-          package: formData.package,
-          paymentMethod: formData.paymentMethod,
-          paymentStatus: formData.paymentStatus,
-          phone: formData.phone,
-          startDate: formData.startDate,
-          status: formData.status,
-          subject: formData.subject,
-          totalCost: formData.totalCost,
-        }),
+        body: JSON.stringify(payload),
       });
     } catch (err) {
       console.error("POST Error:", err);
