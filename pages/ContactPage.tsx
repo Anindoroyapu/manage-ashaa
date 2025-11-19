@@ -4,10 +4,7 @@ import type { Contact } from '../types';
 import Button from '../components/ui/Button';
 import CrudComponent from '../components/CrudComponent';
 
-const initialContacts: Contact[] = [
-  { id: '1', name: 'Jane Smith', email: 'jane@example.com', phone: '123-456-7890', message: 'Inquiry about services.', createdAt: new Date().toISOString() },
-  { id: '2', name: 'Mike Johnson', email: 'mike@example.com', phone: '098-765-4321', message: 'Question about pricing.', createdAt: new Date().toISOString() },
-];
+
 
 const ContactForm: React.FC<{
   onSubmit: (data: Omit<Contact, 'id' | 'createdAt'>) => void;
@@ -69,7 +66,7 @@ const ContactTable: React.FC<{
         <tr className="border-b dark:border-gray-700">
           <th className="p-3">Name</th>
           <th className="p-3">Email</th>
-          <th className="p-3">Phone</th>
+          <th className="p-3">Phone</th><th className="p-3">Subject</th>
           <th className="p-3">Message</th>
           <th className="p-3">Actions</th>
         </tr>
@@ -77,9 +74,10 @@ const ContactTable: React.FC<{
       <tbody>
         {items.map(item => (
           <tr key={item.id} className="border-b dark:border-gray-700">
-            <td className="p-3">{item.name}</td>
+            <td className="p-3">{item.fullName}</td>
             <td className="p-3">{item.email}</td>
             <td className="p-3">{item.phone}</td>
+                <td className="p-3">{item.subject}</td>
             <td className="p-3 truncate max-w-xs">{item.message}</td>
             <td className="p-3">
               <div className="flex gap-2">
@@ -96,11 +94,29 @@ const ContactTable: React.FC<{
 
 
 const ContactPage: React.FC = () => {
+    const [contactList, setContactList] = React.useState<Contact[]>([]);
+    const [isLoading, setIsLoading] = React.useState(true);
+  
+    React.useEffect(() => {
+      fetchData();
+    }, []);
+  
+    const fetchData = async () => {
+      try {
+        const res = await fetch("https://admin.ashaa.xyz/api/Contact");
+        const json = await res.json();
+        setContactList(json || []);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
     return (
         <CrudComponent<Contact>
             title="Manage Contacts"
             itemType="Contact"
-            initialItems={initialContacts}
+            initialItems={contactList}
             renderTable={(items, onEdit, onDelete) => <ContactTable items={items} onEdit={onEdit} onDelete={onDelete} />}
             renderForm={(onSubmit, onCancel, isLoading, initialData) => <ContactForm onSubmit={onSubmit} onCancel={onCancel} isLoading={isLoading} initialData={initialData} />}
         />
