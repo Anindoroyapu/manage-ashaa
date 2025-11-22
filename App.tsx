@@ -11,6 +11,7 @@ import CollectionPage from './pages/CollectionPage';
 import ExpenditurePage from './pages/ExpenditurePage';
 import OtherPage from './pages/OtherPage';
 import SettingsPage from './pages/SettingsPage';
+import BookingForm from './pages/MakeBooking';
 
 const ProtectedRoute: React.FC = () => {
   const { isLoggedIn } = useAuth();
@@ -36,6 +37,8 @@ const App: React.FC = () => {
             <Route path="/settings" element={<SettingsPage />} />
           </Route>
           <Route path="*" element={<Navigate to="/" />} />
+                      <Route path="/make-booking" element={<BookingForm />} />
+
         </Routes>
       </HashRouter>
     </div>
