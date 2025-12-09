@@ -340,19 +340,19 @@ const BookingTable: React.FC<{
     <table className="w-full text-left">
       <thead>
         <tr className="border-b dark:border-gray-700">
-          <th className="p-3">Name</th>
-          <th className="p-3">Contact</th>
-          <th className="p-3">Location</th>
-          <th className="p-3">Package</th>
-          <th className="p-3">Type</th>
+          <th className="py-3">Name</th>
+          <th className="py-3">Contact</th>
+          <th className="py-3">Location</th>
+          <th className="py-3">Package</th>
+          <th className="py-3">Type</th>
 
-          <th className="p-3">Event Date</th>
-          <th className="p-3">Advance</th>
-          <th className="p-3">Pay</th>
-          <th>Payment</th>
+          <th className="py-3">Event Date</th>
+          <th className="py-3">Advance</th>
+          <th className="py-3">Pay</th>
+          <th className="py-3">Payment</th>
 
-          <th className="p-3">Status</th>
-          <th className="p-3">Actions</th>
+          <th className="py-3">Status</th>
+          <th className="py-3">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -374,7 +374,7 @@ const BookingTable: React.FC<{
             <td className=" ">{item.paymentStatus}</td>
             <td className=" ">{item.status}</td>
             <td className="">
-              <div className="flex gap-2">
+              <div className="flex gap-2 py-1">
                 <Button variant="secondary" onClick={() => onEdit(item)}>
                   Edit
                 </Button>
@@ -385,6 +385,13 @@ const BookingTable: React.FC<{
             </td>
           </tr>
         ))}
+        <tr>
+          <td colSpan={7}>Total</td>
+          <td className="text-green-500">{items.reduce((sum, item) => sum + (item.totalCost || 0), 0)} tk</td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
       </tbody>
     </table>
   </div>
