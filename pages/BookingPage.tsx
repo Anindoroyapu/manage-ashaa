@@ -349,6 +349,7 @@ const BookingTable: React.FC<{
           <th className="p-3">Event Date</th>
           <th className="p-3">Advance</th>
           <th className="p-3">Pay</th>
+          <th>Payment</th>
 
           <th className="p-3">Status</th>
           <th className="p-3">Actions</th>
@@ -357,28 +358,29 @@ const BookingTable: React.FC<{
       <tbody>
         {items.slice()
                 .reverse().map((item) => (
-          <tr key={item.id} className="border-b dark:border-gray-700">
-            <td className="p-3">{item.fullName}</td>
-            <td className="p-3">
+          <tr key={item.id} className={`border-b dark:border-gray-700 !text-xs ${(!item.status || item.status === "Pending") ? "text-yellow-600" : ""}`}>
+            <td className=" max-w-[200px]">{item.fullName}</td>
+            <td className=" ">
               {item.phone}
               <br />
               {item.email}
             </td>
-            <td className="p-3">{item.location}</td>
-            <td className="p-3">{item.package}</td>
-            <td className="p-3">{item.subject}</td>
-            <td className="p-3">{item.startDate}</td>
-            <td className="p-3">{item.bookingCost}</td>{" "}
-            <td className="p-3">{item.totalCost}</td>
-            <td className="p-3">{item.paymentStatus}</td>
-            <td className="p-3">
+            <td className="max-w-[200px] ">{item.location}</td>
+            <td className=" ">{item.package}</td>
+            <td className=" ">{item.subject}</td>
+            <td className=" ">{item.startDate}</td>
+            <td className=" ">{item.bookingCost}</td>{" "}
+            <td className=" ">{item.totalCost}</td>
+            <td className=" ">{item.paymentStatus}</td>
+            <td className=" ">{item.status}</td>
+            <td className="">
               <div className="flex gap-2">
                 <Button variant="secondary" onClick={() => onEdit(item)}>
                   Edit
                 </Button>
-                <Button variant="danger" onClick={() => onDelete(item.id)}>
+                {/* <Button variant="danger" onClick={() => onDelete(item.id)}>
                   Delete
-                </Button>
+                </Button> */}
               </div>
             </td>
           </tr>
